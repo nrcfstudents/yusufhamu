@@ -71,3 +71,29 @@ body {
 .nav-links a:hover::after {
     width: 100%;
 }
+
+/* Hero section */
+.hero-section{
+    background: url('images/hero.jpg') no-repeat center center/cover;
+    text-align: center;
+    color: blueviolet;
+    padding: 100px 20px;
+}
+
+.hero-content h1{
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.hero-content p{
+    font-size: 1.5em;
+    margin-bottom: 30px;
+}
+
+.btn-primary{
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
