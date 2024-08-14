@@ -255,3 +255,154 @@ body {
     top: 0;
     font-size: 18px;
 }
+
+/* Contact Section Styling */
+.contact-section {
+    background: linear-gradient(135deg, #6dd5ed, #2193b0); /* Blue gradient background */
+    background-color: lightblue;
+    color: #fff;
+    padding: 50px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Soft shadow */
+}
+
+.contact-info{
+    color: black;
+}
+
+.contact-section h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow for the title */
+}
+
+.contact-section p {
+    font-size: 1.4em;
+    margin-bottom: 40px;
+}
+
+.contact-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    align-items: flex-start; /* Aligns the top of the form and info section */
+}
+
+.contact-info {
+    flex: 1; /* Takes up less space */
+    min-width: 250px; /* Ensures a minimum width */
+    max-width: 300px; /* Optional: limit the max width */
+    margin-bottom: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.contact-info h3 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.contact-info p {
+    font-size: 1em;
+    margin: 5px 0;
+}
+
+.contact-card {
+    background: rgba(255, 255, 255, 0.1); /* Transparent white background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow for card effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 250px;
+    text-align: left;
+}
+
+.contact-card:hover {
+    transform: translateY(-10px); /* Lift on hover */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+}
+
+.contact-card .icon {
+    font-size: 1.5em; /* Adjust size for Unicode */
+    width: 24px; /* Size for SVG icons */
+    height: 24px; /* Size for SVG icons */
+    fill: #ff9800; /* Color for SVG icons */
+    color: #ff9800; /* Color for Unicode symbols */
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.contact-card i {
+    font-size: 2em;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.contact-card p {
+    font-size: 1.1em;
+    margin: 0;
+    color: #fff;
+}
+
+.contact-card strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #ffee58; /* Yellow color for labels */
+}
+
+.contact-form {
+    flex: 2; /* Takes up more space than contact info */
+    max-width: 800px; /* Set a larger max-width if needed */    
+    /*margin: 0 auto;*/
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+button[type="submit"] {
+    background-color: #FFD700;
+    color: #333;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #FFA500;
+}
