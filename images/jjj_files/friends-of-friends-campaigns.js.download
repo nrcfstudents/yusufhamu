@@ -1,0 +1,84 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const dropdownSelected = document.querySelector('.dropdown-selected');
+    const dropdownOptions = document.querySelector('.dropdown-options');
+    const options = document.querySelectorAll('.dropdown-option');
+
+    if (dropdownSelected) {
+        // Define the selected text element
+        const selectedTextElement = dropdownSelected.querySelector('.selected-text');
+
+        if (selectedTextElement) {
+            // Set default selection
+            const defaultOption = document.querySelector('.dropdown-option[data-value="primary"]');
+            if (defaultOption) {
+                selectedTextElement.textContent = defaultOption.textContent;
+                defaultOption.classList.add('selected');
+            }
+
+            dropdownSelected.addEventListener('click', function() {
+            const isDropdownOpen = dropdownOptions.style.display === 'block';
+                dropdownOptions.style.display = isDropdownOpen ? 'none' : 'block';
+            });
+
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedTextElement.textContent = this.textContent;
+                    dropdownOptions.style.display = 'none';
+                    handleDepartmentChange(this.getAttribute('data-value'));
+                });
+
+                option.addEventListener('mouseover', function() {
+                    this.classList.add('hover');
+                });
+
+                option.addEventListener('mouseout', function() {
+                    this.classList.remove('hover');
+                    if (!this.classList.contains('selected')) {
+                        const previouslySelected  = document.querySelector('.dropdown-option.selected');
+                        if (previouslySelected) {
+                            previouslySelected.classList.add('selected');
+                        }
+                    }
+                });
+            });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!dropdownSelected.contains(event.target) && !dropdownOptions.contains(event.target)) {
+                dropdownOptions.style.display = 'none';           
+            }
+        });
+    }
+
+    function handleDepartmentChange(value) {
+        let galleryContentArea = document.getElementById('friends-campaign-children');
+        galleryContentArea.innerHTML = '';
+
+        let galleryId;
+        let galleryHeading;
+
+        switch (value) {
+            case 'primary':
+                galleryHeading = 'These students are usually new to the program and will enter 4th to 6th grade after sponsorship.';
+                galleryId = childrenGalleryWithCampaignId;
+                break;
+            case 'secondary':
+                galleryHeading = 'These students need your help in finishing High School and their College journey.';
+                galleryId = secondaryChildrenGalleryWithCampaignId;
+                break;
+            case 'post-secondary':
+                galleryHeading = 'These students are almost done with their education and need a few years of support.';
+                galleryId = postSecondaryChildrenGalleryWithCampaignId;
+                break;
+            default:
+                galleryHeading = '';
+                galleryId = '';
+        }
+
+        // Append the gallery shortcode output and heading to the gallery content area
+        galleryContentArea.innerHTML += '<p>' + galleryHeading + '<br>' + galleryId + '</p>';
+    }  
+});

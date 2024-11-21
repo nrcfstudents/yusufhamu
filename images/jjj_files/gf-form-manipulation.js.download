@@ -1,0 +1,44 @@
+// Document ready function for Wordpress
+jQuery(function($) {
+
+    $('input[name=input_10]', '#gform_2').change(function(){
+        // on change of payment frequency
+        var period = 'Yearly',
+            frequency = 1;
+
+        if ( $('input[name=input_10]:checked', '#gform_2').val() == 'Monthly' ) {
+            frequency = 12;
+            period = 'Monthly';
+        }
+
+        $('form#gform_2 input#input_2_30').val( frequency );  // number of payments per year
+
+        $('form#gform_2 input#input_2_31').val( period );  // number of payments per year
+
+    });
+
+    /**
+     * Reset form spinner on when Stripe card elements errors are cleared
+     */
+    jQuery(document).on('gform_post_render', function (event, form_id, current_page) {
+        if ('undefined' === typeof gfp_stripe_js_vars) {
+            return;
+        }
+
+        if (! gfp_stripe_js_vars.gformStripeCardElement) {
+            return;
+        }
+
+        gfp_stripe_js_vars.gformStripeCardElement.addEventListener('change', function (event) {
+
+            if (event.error) {
+                gformRemoveSpinner();
+                jQuery('.gform_ajax_spinner').remove();
+            } else {
+                window['gf_submitting_'+form_id] = false;
+            }
+
+        });
+    });
+
+  });

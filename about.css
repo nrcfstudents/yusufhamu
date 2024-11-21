@@ -1,0 +1,33 @@
+body{
+	font-family: monospace;
+	margin: 0px;
+	padding: 0px;
+}
+.row {
+	display: flex;
+	justify-content: space between;
+	gap: 15px;
+}	
+.heading{
+	font-size: 30px;
+}
+.about-section{
+	padding: 50px;
+	text-align: center;
+	background-color: steelblue;
+	color: white;
+}
+.container{
+	padding: 0 16px;
+}
+.column,.row{
+	border: 2px solid;
+}
+.column{
+	padding: 10px;
+	width: 100%;
+}
+img{
+	width: 70px;
+	height: auto;
+}

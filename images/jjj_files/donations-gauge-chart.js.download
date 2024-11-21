@@ -1,0 +1,60 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+    if (! document.getElementById('gauge-chart')) {
+        return;
+    }
+
+    var chart = c3.generate({
+        bindto: '#gauge-chart',
+        data: {
+            columns: [
+                ['Donations', donations_progress]
+            ],
+            type: 'gauge',
+            gauge: {
+                label: {
+                    format: function (value, ratio) {
+                        return value;
+                    },
+                    show: true // to turn off the min/max labels.
+                },
+                min: 1,
+                max: 100,
+                units: ' %',
+            },
+            axis: {
+                y: {
+                    padding: {  
+                        top:  0, 
+                        bottom:  0 
+                    },
+                }
+            }  
+        },
+        color: {
+            pattern: ['#e26648'],
+            //threshold: {
+                //values: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+            //}
+        },
+        size: {
+            height: 300
+        },
+        padding: {
+            bottom:  20, 
+        }
+    });
+
+    // Apply styles to the gauge SVG elements
+    d3.select('#gauge-chart .c3-chart-arcs-background path').style('fill', '#ddd');
+    d3.select('#gauge-chart .c3-chart-arcs-gauge-max path').style('fill', '#60B044');
+    d3.select('#gauge-chart .c3-chart-arcs-gauge-min path').style('fill', '#FF0000');
+
+     // Customize the position of the min and max labels
+     d3.select('#gauge-chart .c3-chart-arcs-gauge-max text')
+     .attr('dy', '30em'); // Adjust the 'dy' attribute to move the label down
+
+    d3.select('#gauge-chart .c3-chart-arcs-gauge-min text')
+     .attr('dy', '30em'); // Adjust the 'dy' attribute to move the label down
+
+});

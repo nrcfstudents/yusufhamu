@@ -1,0 +1,363 @@
+(function($) {
+
+    const correspondenceGformId = 28;
+
+    /**
+     * Mark a message as read for the current user.
+     *
+     * @param {Number} messageId Message CPT ID.
+     * @param {Number} childId   Child CPT ID.
+     * @param {Number} sponsorId Sponsor CPT ID.
+     */
+    function markRead(messageId, childId, sponsorId) {
+        $.ajax({
+            'url': window.ngongRoad.correspondence.ajaxUrl,
+            'method': 'POST',
+            'data': {
+                'action': 'ngong_road_mark_correspondence_read',
+                'nonce': window.ngongRoad.correspondence.nonce,
+                'messageId': messageId,
+                'childId': childId,
+                'sponsorId': sponsorId,
+            }
+        }).success(function(data) {
+            $('.message-' + messageId).removeClass('unread').addClass('read');
+            addInboxMarkers();
+        }).error(function(jqXHR, textStatus, errorThrown) {
+            console.error('Error:', textStatus, errorThrown); // Debugging statement for errors
+        });
+    }
+
+    /**
+     * Retrieve more messages via ajax.
+     *
+     * @param {Number} childId   Child CPT ID.
+     * @param {Number} sponsorId Sponsor CPT ID.
+     * @param {Number} offset    Message offset.
+     * @param {String} nonce     Nonce to authenticate request.
+     */
+    function retrieveMessages(childId, sponsorId, offset, nonce) {
+        $.ajax({
+            'url': window.ngongRoad.correspondence.ajaxUrl,
+            'method': 'POST',
+            'data': {
+                'action': 'ngong_road_fetch_messages',
+                'nonce': nonce,
+                'childId': childId,
+                'sponsorId': sponsorId,
+                'offset': offset,
+            }
+        }).success(function(data, textStatus, jqXHR) {
+            var existingCount = $('.correspondence-list').data('messages-displayed'),
+                newCount = existingCount + data.data.messageCount;
+
+            $('.correspondence-list').data('messages-displayed', newCount);
+            $('.message-count').text(newCount)
+            $('.correspondence-list tbody').append(data.data.messageContent);
+
+            // Add the 'closed' class to the new message rows
+            $('.correspondence-list tbody .message-row').addClass('closed');
+
+            // Hide the message content for the new messages
+            $('.correspondence-list tbody .message-content').slideUp();
+
+            //$('.correspondence-list .message-content').slideUp();
+            //$('.correspondence-list .message-toggle').addClass('closed');
+        }).error(function(jqXHR, textStatus, error) {
+            if ('undefined' !== typeof jqXHR.responseJSON.data.error) {
+                error = jqXHR.responseJSON.data.error;
+            }
+            $('.messages-fetch-more').after('<p class="message error">Error: ' + error + '</p>');
+        });
+    }
+
+    /**
+     * Delete message via ajax.
+     *
+     * @param {Number} entryId Gravity Forms entry ID.
+     * @param {String} nonce   Nonce to authenticate request.
+     */
+    function deleteMessage(entryId, nonce) {
+        $.ajax({
+            'url': window.ngongRoad.correspondence.ajaxUrl,
+            'method': 'POST',
+            'data': {
+                'action': 'ngong_road_delete_message',
+                'nonce': nonce,
+                'entryId': entryId,
+            }
+        }).success(function(data, textStatus, jqXHR) {
+            $('.correspondence-list tr.draft-message-' + entryId).slideUp().remove();
+        }).error(function(jqXHR, textStatus, error) {
+            if ('undefined' !== typeof jqXHR.responseJSON.data.error) {
+                error = jqXHR.responseJSON.data.error;
+            }
+            $('.delete-draft-message[data-entry-id=' + entryId + ']').html('<span class="message error">Error: ' + error + '</span>');
+        });
+    }
+
+    /**
+     * Add unread message indicator to inbox tab.
+     */
+    function addInboxMarkers() {
+        $('.child').each(function(index, element) {
+            if ($(element).find('.correspondence-list .message-row.unread').length > 0) {
+                $(element).find('.inbox-tab').addClass('has-unread');
+            } else {
+                $(element).find('.inbox-tab').removeClass('has-unread');
+            }
+        });
+
+         // Target .inbox-tab elements directly
+         if ($('.correspondence-list .message-row.unread').length > 0) {
+            $('.inbox-tab').addClass('has-unread');
+        } else {
+            $('.inbox-tab').removeClass('has-unread');
+        }
+    }
+
+    /**
+     * Open the modal to write a message.
+     *
+     * @param {Number} childID Child CPT ID.
+     * @param {String} subject Message subject.
+     * @param {String} bodyContent Message body.
+     * @param {String} partialEntryId Optional partial entry ID.
+     */
+    function newMessageOpen(childID, subject, bodyContent, partialEntryId = '') {
+        $('.new-message-con').fadeIn();
+        if ( childID ) {
+            $('#input_' + correspondenceGformId + '_5').val(childID);
+            $('#new-message-cancel-btn').attr( 'data-child', childID );
+        }
+        if ( subject ) {
+            $('#input_' + correspondenceGformId + '_2').val(subject);
+        } else {
+            $('#input_' + correspondenceGformId + '_2').val('');
+        }
+        if ( bodyContent ) {
+            $('#input_' + correspondenceGformId + '_3').val(bodyContent);
+        } else {
+            $('#input_' + correspondenceGformId + '_3').val('');
+        }
+        if ( partialEntryId.length > 0 ) {
+            $('#partial_entry_id_' + correspondenceGformId).val(partialEntryId);
+        }
+    }
+
+    /**
+     * Retrieve more photos via ajax.
+     *
+     * @param {Number} brilliantStoragePersonId Person ID.
+     * @param {Number} offset   Photo offset.
+     * @param {String} nonce   Nonce to authenticate request.
+     */
+    function retrieveMorePhotos(brilliantStoragePersonId, offset, nonce) {
+        $('.load-more-photos-spinner').show();
+        $.ajax({
+            'url': window.ngongRoad.photos.ajaxUrl,
+            'method': 'POST',
+            'data': {
+                'action': 'ngong_road_fetch_photos',
+                'nonce': nonce,
+                'brilliantStoragePersonId': brilliantStoragePersonId,
+                'offset': offset,
+                // 'limit' parameter set on the server side.
+            }
+        }).done(function(data) {
+            var photoContainer = $('.child-photo-container');
+            photoContainer.append(data.data.photoContent);
+
+            if (data && data.data && data.data.hasMore) {
+                // There are more photos to load
+                $('.photos-fetch-more').data('offset', offset);
+            } else {
+                //photoContainer.append('<p style="color: #AA101A;">No more photos available.</p>');
+                $('.photos-fetch-more').remove();
+            }
+            $('.load-more-photos-spinner').hide();
+
+        }).fail(function(jqXHR, textStatus, error) {
+            if (jqXHR.responseJSON && 'undefined' !== typeof jqXHR.responseJSON.error) {
+                error = jqXHR.responseJSON.error;
+            }
+            $('.photos-fetch-more').after('<p class="message error">Error: ' + error + '</p>');
+            $('.load-more-photos-spinner').hide();
+        });
+    }
+
+    /**
+     * Run when document is ready.
+     */
+    $('document').ready(function() {
+
+        /**
+         * Add inbox tab markers.
+         */
+        addInboxMarkers();
+
+        /**
+         * Hide message content on pageload.
+         */
+        $('.correspondence-list .message-content').slideUp();
+        $('.correspondence-list .message-row').addClass('closed');
+
+        /**
+         * Toggle message content when requested.
+         */
+        $('body').on('click', '.correspondence-list .message-toggle', function(e) {
+            e.preventDefault();
+            var messageId = $(this).data('message-id'),
+                $target = $('#message-content-'+ messageId);
+
+            $target.slideToggle();
+            $(this).parent('.message-row').toggleClass('closed open');
+        });
+
+        /**
+         * Mark message as read.
+         */
+        $('body').on('click', '.correspondence-list tr.message-row', function(e) {
+            var messageId = $(this).data('message-id'),
+                childId = $(this).data('child-id'),
+                sponsorId = $(this).data('sponsor-id')
+
+            // Mark message as read.
+            if ($('.message-' + messageId).hasClass('unread') && ! $('.message-' + messageId).hasClass('draft')) {
+                markRead(messageId, childId, sponsorId);
+            }
+        });
+
+        /**
+         * Retrieve more messages.
+         */
+        $('body').on('click', '.messages-fetch-more', function(e) {
+            e.preventDefault();
+
+            var childId = $(this).data('child-id'),
+                sponsorId = $(this).data('sponsor-id'),
+                offset = $('.correspondence-list').data('messages-displayed'),
+                nonce = $(this).data('nonce');
+
+            retrieveMessages(childId, sponsorId, offset, nonce);
+        });
+
+        /**
+         * Handle new/edit message button.
+         */
+        $(".edit-message-modal, .open-message-modal").on(
+          "click",
+          function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            newMessageOpen(
+              $(this).data("child-id"),
+              $(this).data("subject"),
+              $(this).data("msg-content"),
+              $(this).data("partial-entry-id"),
+            );
+          }
+        );
+
+        $('.new-message-cancel').click(function() {
+            //var shouldSaveDraft = $('#input_' + correspondenceGformId + '_2').val().length > 0 || $('#input_' + correspondenceGformId + '_3').val().length > 0;
+            var shouldSaveDraft = ($('#input_' + correspondenceGformId + '_2').length && $('#input_' + correspondenceGformId + '_2').val().length > 0) || ($('#input_' + correspondenceGformId + '_3').length && $('#input_' + correspondenceGformId + '_3').val().length > 0);
+
+            // Immediately save content instead of waiting for the next heartbeat.
+            if (shouldSaveDraft) {
+                window.wp.heartbeat.connectNow();
+            }
+
+            $('.new-message-con').fadeOut();
+        });
+
+        /**
+         * Handle delete message button.
+         */
+        $('.delete-draft-message').on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            $(this).css({
+                cursor: 'wait',
+            });
+            deleteMessage($(this).data('entry-id'), $(this).data('nonce'));
+        });
+
+        /**
+         * Retrieve more photos.
+         */
+        $('body').on('click', '.photos-fetch-more', function(e) {
+            e.preventDefault();
+
+            var brilliantStoragePersonId = $(this).data('brilliant-storage-person-id');
+            var offset = parseInt($(this).data('offset'), 10);
+            var nonce = $(this).data('nonce');
+
+            offset += 6;
+
+            $(this).data('offset', offset);
+
+            retrieveMorePhotos(brilliantStoragePersonId, offset, nonce);
+        });
+    });
+
+    // Define the scroll functions
+    window.scrollToInbox = function(offset) {
+        var inboxDiv = document.querySelector('.inbox');
+        if (!inboxDiv) return;
+        const elementRect = inboxDiv.getBoundingClientRect();
+        const scrollTop = window.scrollY;
+        const targetPosition = elementRect.top + scrollTop - offset;
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    };
+
+    window.scrollToPhotos = function(offset) {
+        var photosDiv = document.querySelector('.photos');
+        if (!photosDiv) return; // Early exit if the element is not found
+        //photosDiv.scrollIntoView({ behavior: 'smooth' , block: 'start'});
+        const elementRect = photosDiv.getBoundingClientRect();
+        const scrollTop = window.scrollY;
+        const targetPosition = elementRect.top + scrollTop - offset;
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    };
+
+    window.scrollToMarks= function(offset) {
+        var marksDiv = document.querySelector('.file-downloads');
+        if(!marksDiv) return;
+        const elementRect = marksDiv.getBoundingClientRect();
+        const scrollTop = window.scrollY;
+        const targetPosition = elementRect.top + scrollTop - offset;
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    };
+
+    window.scrollToTop= function() {
+        //var photosDiv = document.querySelector('.child-container');
+        //photosDiv.scrollIntoView({ behavior: 'smooth' , block: 'start'});
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    var scrollToTopButton = document.querySelector('.scroll-to-top');
+    scrollToTopButton.style.display = 'none';
+
+    window.addEventListener('scroll', function() {
+        var scrollToTopButton = document.querySelector('.scroll-to-top');
+        if (window.scrollY > 550) {
+           scrollToTopButton.style.display = 'block';
+        } else {
+           scrollToTopButton.style.display = 'none';
+        }
+    });
+
+}(jQuery));

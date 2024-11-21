@@ -1,0 +1,22 @@
+jQuery(function( $ ) {
+
+    // Ensure the .accordion-content div is always open
+    $('.accordion-content').addClass('show').show();
+
+    $('.toggle').click(function(e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        $this.toggleClass('open');
+        
+        if ($this.next().hasClass('show')) {
+            $this.next().removeClass('show');
+            $this.next().slideUp(350);
+        } else {
+            $this.parent().parent().find('li .accordion-content').removeClass('show');
+            $this.parent().parent().find('li .accordion-content').slideUp(350);
+            $this.next().toggleClass('show');
+            $this.next().slideToggle(350);
+        }
+    });
+});

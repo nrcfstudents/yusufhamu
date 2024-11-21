@@ -1,0 +1,402 @@
+/*
+ Friends of Friends Campaigns
+ Description: Custom CSS for Friends of Friends Campaigns in Altitude Pro Child Theme.
+ Author: Washingtone Aura
+ Version: 1.1
+*/
+/* ==============================================
+   Friends of Friends Campaigns CSS
+   ============================================== */
+
+/* Friends campaigns Multiposts page CSS  */
+.flex-container {
+  display: grid;
+  grid-template-columns: repeat(2,  1fr); /* Create two equal-width columns */
+  grid-gap:  3%; /* Adjust the gap between grid items */
+  grid-auto-rows: min-content; /* This will create a grid row for each item */
+  align-items: start; /* Align items to the start of the container */
+}
+
+.flex-item {
+  width:  100%; /* This makes the item take the full width of the column */
+  box-sizing: border-box;
+  margin-bottom:  2%; /* Adjust as needed to leave some space between posts vertically */
+  border:  1px solid #ccc; /* Border color */
+  padding:  10px;
+  break-inside: avoid; /* Prevents the item from being split across columns */
+}
+
+.donate-button-container {
+  margin-top: 10px; /* Adjust as needed to create space between "Days Left" and the button */
+}
+
+.donate-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #8B4513; /* Brown color */
+  color: #fff; /* Text color */
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.donate-button:hover {
+  background-color: #654321; /* Darker brown color on hover */
+}
+
+/* featured image full width */
+.featured-image img {
+  display: block;
+  width:  100%;
+  height: auto;
+}
+
+/* Styling for Single Post Page */
+.single-post-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row; /* Change to column layout on small screens */
+  align-items: flex-start;  
+  gap:20px;
+}
+
+.left-container {
+  flex: 0 0 50%;
+  max-width: 48%;
+  padding: 2%;
+  box-sizing: border-box;
+}
+
+.right-container {
+  flex: 0 0 50%;
+  max-width: 48%;
+  padding: 2%;
+  box-sizing: border-box;
+  border: 1px solid #ccc; /* Border color */
+  margin-top:50px;
+}
+
+.single-post-container .featured-image img {
+  width: auto; /* Adjusted to auto, so the image won't be forced to 100% */
+  height: 300px;
+  float: left; /* Aligns the image to the left */
+  margin-right: 20px; /* Adds some space between the image and the text */
+  display: block;
+}
+
+.single-post-container .post-content {
+  clear: both; /* Ensures the content starts on a new line below the image */
+}
+
+.progress-container {
+  width: 100%;
+  background-color: rgb(221, 221, 221);
+}
+
+.progress-bar {
+  height: 20px;
+  background-color: #a25439;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 20px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.left-text {
+  flex: 1;
+  text-align: left;
+}
+.right-text {
+  flex: 1;
+  text-align: right;
+}
+
+/* Styling for the dollars-gauge-chart container */
+#gauge-chart {
+  width: 100%; 
+  position: relative;
+  margin-top: -60px; /* Adjust the value as needed to move the chart up */
+  pointer-events: none;  /*Disable pointer events on the gauge-chart container */
+}
+
+/* Styling for the gauge label */
+#gauge-chart:after {
+  content: attr(data-value); /* Display the gauge value */
+  position: absolute; /* Position absolutely within the container */
+  top: 70%; /* Adjust the vertical position (move it down) */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center precisely */
+  font-size: 15px; /* Adjust font size as needed */
+  font-weight: bold; /* Set font weight to bold */
+  color: #000000; /* Set text color */
+  text-align: center; /* Center the text horizontally */
+  line-height: 1.2; /* Adjust line height for vertical centering */
+  z-index: 2; /* Ensure the label is on top */
+}
+
+/* Styling for the sponsorships-gauge-chart container */
+#sponsorships-gauge-chart {
+  width: 100%; 
+  position: relative;
+  margin-top: -60px; /* Adjust the value as needed to move the chart up */
+  pointer-events: none;  /*Disable pointer events on the gauge-chart container */
+}
+
+/* Styling for the gauge label */
+#sponsorships-gauge-chart:after {
+  content: attr(data-value); /* Display the gauge value */
+  position: absolute; /* Position absolutely within the container */
+  top: 70%; /* Adjust the vertical position (move it down) */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center precisely */
+  font-size: 15px; /* Adjust font size as needed */
+  font-weight: bold; /* Set font weight to bold */
+  color: #000000; /* Set text color */
+  text-align: center; /* Center the text horizontally */
+  line-height: 1.2; /* Adjust line height for vertical centering */
+  z-index: 2; /* Ensure the label is on top */
+}
+
+/* Styling for the gauge colors (adjust colors as needed) */
+.c3-chart-arcs-background path {
+  fill: rgb(221, 221, 221); /* Set the background color of the gauge */
+}
+
+.c3-chart-arcs-gauge-max,
+.c3-chart-arcs-gauge-min {
+  fill: transparent; /* Make the max and min paths transparent to avoid overlap */
+}
+
+.c3-chart-arcs-gauge-max path,
+.c3-chart-arcs-gauge-min path {
+  fill: none; /* Ensure the max and min paths have no fill */
+}
+
+.c3-chart-arcs-gauge-max {
+  stroke: #aa101a; /* Set color for the maximum value */
+}
+
+.c3-chart-arcs-gauge-min {
+  stroke: #000000; /* Set color for the minimum value */
+}
+
+.c3 svg {
+  font: 15px sans-serif;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.fundraising-details hr {
+  margin-top:  5%;
+  margin-bottom:  5%;
+  padding:  0; /* Remove default padding */
+  border: none; /* Remove the default border */
+  border-top:  1px solid rgb(141, 141, 141); /* Add a custom border if desired */
+  height:  1px; /* Set the height of the line */
+}
+
+.fundraising-details2 hr {
+  display: none;
+}
+
+.fundraising-details2 p {
+  margin-top:  5%;
+}
+
+#donors{
+  text-align: center;
+
+}
+#donors p{
+  margin: 5px;
+}
+
+.friends-of-friends .entry-header {
+  display: none;
+}
+
+.friends-of-friends-heading {
+  margin-top: 40px;
+}
+
+.friends-of-friends .entry-header {
+  display: none;
+}
+
+.post-type-archive-friends-of-friends .content {
+  width: 100%;
+}
+
+.friends-of-friends-post-content {
+    padding-top: 14px;
+}
+
+/* Display only two children per row in single-friends-of-friends */
+.right-container .childgallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 2%; /* Space between child profiles */
+}
+
+.right-container .childprofile {
+  margin-bottom: 5px;
+}
+
+.right-container .childgallery .childgriditem {
+  flex: 0 1 auto;
+  width: calc(48% - 2%);/*(100% minus 4% padding) divide by 2 for two children then - 2% gap*/
+  margin-bottom: 5%;
+  min-height: 300px;
+}
+
+.right-container .childprofile .childname{
+  margin-top: -10%;
+}
+
+.right-container .childprofile .brownlink{
+  margin-top: 1%;
+}
+
+.right-container .brownlink {
+  /*background-color: #663300;*/
+  border-radius: 10px;
+  padding: 0 5px;
+  color: #ffffff;
+}
+
+.right-container .brownlink a {
+  padding: 0 10px 0 10px;
+  font-size: medium;
+}
+
+/*Grey out friends of friengs campaign students that get sponsored and make links unclickable*/
+.sponsored-children .childprofile {
+  opacity: 0.6; /* This will make the child profile boxes look greyed out */
+}
+
+.sponsored-children .childprofile a {
+  pointer-events: none; /* This will make the links unclickable */
+  cursor: default; /* This will change the cursor to the default arrow when hovering over the links */
+}
+
+.sponsored-children .brownlink {
+  display: inline-block;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+ }
+
+ .child-department {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 20px 20px 0;
+}
+
+.custom-dropdown {
+  position: relative;
+  width: 80%;
+  cursor: pointer;
+}
+
+.dropdown-selected {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-selected:focus {
+  border-color: #e26648;
+}
+
+.dropdown-options {
+  display: none;
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  z-index: 1000;
+}
+
+.dropdown-option {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #fff;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.dropdown-option:hover {
+  background-color: #c99d61;
+  color: #fff;
+}
+
+.dropdown-option.selected {
+  background-color: #e26648;
+  color: #fff;
+}
+
+.dashicons-arrow-down {
+  font-size: 20px;
+  color: #333;
+}
+
+.fundraising-details h2{
+  font-weight: 300;
+}
+
+.more-children{
+  display: flex;
+  justify-content: center; 
+}
+
+.filter-p p{
+  margin-bottom: 0 !important;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width:  767px) {
+  .right-container .childgallery .childgriditem {
+    flex: 1 1 100%;
+  }
+
+  .right-container .childprofile .childname{
+    margin-top: -3%;
+  }
+
+  .child-department{
+    flex-direction: column;
+  }
+
+  .single-post-container {
+  flex-direction: column; /* Change to column layout on small screens */
+  gap:0px;
+  }
+  .left-container {
+    max-width: 100%;
+  }
+  .right-container {
+    margin-top:2px;
+    max-width: 100%;
+  }
+
+  .flex-container {
+    grid-gap: 1%;
+    grid-template-columns: 1fr; /* Switch to a single-column layout */
+    padding-bottom: 2%;
+  }
+}
